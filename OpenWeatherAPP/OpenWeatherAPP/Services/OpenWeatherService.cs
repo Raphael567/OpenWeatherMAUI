@@ -13,7 +13,7 @@ namespace OpenWeatherAPP.Services
     public class OpenWeatherService
     {
         private const string BaseUrl = "https://api.openweathermap.org/data/2.5/weather";
-        private const string ApiKey = "CHAVE_API";
+        private const string ApiKey = "01badcc1fa8fb95a73f8eece4a40c8de";
 
         private readonly HttpClient _httpClient;
 
@@ -41,8 +41,13 @@ namespace OpenWeatherAPP.Services
 
                     return weatherResponse;
                 }
-
-                throw new Exception($"Erro na API. Status Code: {response.StatusCode}");
+                
+                Debug.WriteLine($"Erro na API. Status Code: {response.StatusCode}");
+                return null;
+            }
+            catch(SystemException ex)
+            {
+                throw new Exception($"Erro na requisição dos dados: {ex.Message}");
             }
             catch (Exception ex)
             {

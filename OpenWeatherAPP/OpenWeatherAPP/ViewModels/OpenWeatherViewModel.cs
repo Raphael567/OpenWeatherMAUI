@@ -37,9 +37,9 @@ namespace OpenWeatherAPP.ViewModels
             {
                 var weatherData = await _service.GetWeather(Cidade);
 
-                Debug.WriteLine($"Weather: {weatherData.weather}");
-                Debug.WriteLine($"Description: {weatherData.weather?[0]?.description}");
-                Debug.WriteLine($"Temperature: {weatherData.main?.temp}");
+                //Debug.WriteLine($"Weather: {weatherData.weather}");
+                //Debug.WriteLine($"Description: {weatherData.weather?[0]?.description}");
+                //Debug.WriteLine($"Temperature: {weatherData.main?.temp}");
 
                 if (weatherData?.weather != null)
                 {
@@ -48,7 +48,7 @@ namespace OpenWeatherAPP.ViewModels
                 }
                 else
                 {
-                    Descricao = "Dados não disponíveis";
+                    Descricao = "Cidade não encontrada";
                     Temperatura = 0;
                 }
             }

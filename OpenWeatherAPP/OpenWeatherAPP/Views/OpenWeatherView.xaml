@@ -9,7 +9,10 @@
         <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
         
         <Label Text="Temperatura:" FontSize="18" />
-        <Label Text="{Binding Temperatura}" FontSize="22" FontAttributes="Bold" />
+        <HorizontalStackLayout>
+            <Label Text="{Binding Temperatura}" FontSize="22" FontAttributes="Bold" />
+            <Label Text=" °C" FontSize="22" FontAttributes="Bold"/>
+        </HorizontalStackLayout>
         <Label Text="Descrição:" FontSize="18" />
         <Label Text="{Binding Descricao}" FontSize="22" FontAttributes="Bold" />
         
