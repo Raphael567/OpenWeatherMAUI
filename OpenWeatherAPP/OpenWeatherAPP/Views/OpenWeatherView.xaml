@@ -5,16 +5,35 @@
              Title="OpenWeatherView">
     <VerticalStackLayout Padding="20" Spacing="10">
         
-        <Entry Placeholder="Digite uma cidade" Text="{Binding Cidade}" />
-        <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
         
         <Label Text="Temperatura:" FontSize="18" />
+        <Label Text="Nome da Cidade" FontSize="25" FontAttributes="Bold"/>
         <HorizontalStackLayout>
-            <Label Text="{Binding Temperatura}" FontSize="22" FontAttributes="Bold" />
-            <Label Text=" °C" FontSize="22" FontAttributes="Bold"/>
+            <Label Text="{Binding Temperatura}" FontSize="35" FontAttributes="Bold" />
+            <Label Text=" °C" FontSize="35" FontAttributes="Bold"/>
         </HorizontalStackLayout>
-        <Label Text="Descrição:" FontSize="18" />
-        <Label Text="{Binding Descricao}" FontSize="22" FontAttributes="Bold" />
+        <HorizontalStackLayout>
+            <Label Text="H:33°"/>
+            <Label Text="L:21°"/>
+        </HorizontalStackLayout>
+
+        <Frame
+            Margin="0,10,0,15"
+            Padding="0"
+            BackgroundColor="#FFFCE2"
+            Opacity="0.5"
+            BorderColor="Transparent"
+            CornerRadius="0"
+            HasShadow="False"
+            HeightRequest="{OnIdiom Desktop=81,
+                                    Tablet=50,
+                                    Phone=30}"
+            WidthRequest="600">
+            <Label Text="{Binding Descricao}" FontSize="22" FontAttributes="Bold" />
+        </Frame>
+        
+        <Entry Placeholder="Digite uma cidade" Text="{Binding Cidade}" />
+        <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
         
     </VerticalStackLayout>
 </ContentPage>
