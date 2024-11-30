@@ -4,35 +4,52 @@
              x:Class="OpenWeatherAPP.Views.OpenWeatherView"
              Title="OpenWeatherView">
     <VerticalStackLayout Padding="20" Spacing="10">
-        
-        
-        <Label Text="Temperatura:" FontSize="18" />
-        <Label Text="Nome da Cidade" FontSize="25" FontAttributes="Bold"/>
-        <HorizontalStackLayout>
-            <Label Text="{Binding Temperatura}" FontSize="35" FontAttributes="Bold" />
-            <Label Text=" °C" FontSize="35" FontAttributes="Bold"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout>
-            <Label Text="H:33°"/>
-            <Label Text="L:21°"/>
-        </HorizontalStackLayout>
 
-        <Frame
-            Margin="0,10,0,15"
-            Padding="0"
-            BackgroundColor="#FFFCE2"
-            Opacity="0.5"
-            BorderColor="Transparent"
-            CornerRadius="0"
-            HasShadow="False"
-            HeightRequest="{OnIdiom Desktop=81,
-                                    Tablet=50,
-                                    Phone=30}"
-            WidthRequest="600">
-            <Label Text="{Binding Descricao}" FontSize="22" FontAttributes="Bold" />
+        <StackLayout HorizontalOptions="Center">
+            <Label Text="{Binding Cidade}" FontSize="28" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label Text="{Binding Temperatura, StringFormat='{}{0:F0}'}" FontSize="45" FontAttributes="Bold"/>
+                <Label Text=" °C" FontSize="45" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+            <Label Text="{Binding Descricao}" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label Text="H:"/>
+                <Label Text="{Binding TemperaturaMaxima, StringFormat='{}{0:F0}'}"/>
+                <Label Text="°"/>
+                <Label Text="L:"/>
+                <Label Text="{Binding TemperaturaMinima, StringFormat='{}{0:F0}'}"/>
+                <Label Text="°"/>
+            </HorizontalStackLayout>
+        </StackLayout>
+
+        <Frame Padding="15" BackgroundColor="#333333" BorderColor="Transparent" CornerRadius="15" HasShadow="False" HeightRequest="{OnIdiom Desktop=100,Tablet=50,Phone=30}">
+            <VerticalStackLayout>
+                <Label Text="⚠ Heavy Rain" 
+                       FontSize="18" 
+                       TextColor="#FFD700"/>
+                <Label Text="Heavy Rain until 10:00, Saturday, 30 November." 
+                       FontSize="14" 
+                       TextColor="White"/>
+                <Label Text="Instituto Nacional de Meteorologia" 
+                       FontSize="12" 
+                       TextColor="Gray"/>
+            </VerticalStackLayout>
         </Frame>
         
-        <Entry Placeholder="Digite uma cidade" Text="{Binding Cidade}" />
+        <CollectionView ItemsSource="{Binding ForecastList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10">
+                        <Label Text="{Binding GetDateTime, StringFormat='{0:dddd, MMMM dd, yyyy - HH:mm}'}" />
+                        <Label Text="{Binding Weather[0].Description}" />
+                        <Label Text="{Binding Main.TempMin}" />
+                        <Label Text="{Binding Main.TempMax}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" />
         <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
         
     </VerticalStackLayout>

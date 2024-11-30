@@ -22,6 +22,9 @@ namespace OpenWeatherAPP.ViewModels
         }
 
         [ObservableProperty]
+        private string _entryCidade;
+
+        [ObservableProperty]
         private string _cidade;
 
         [ObservableProperty]
@@ -30,12 +33,21 @@ namespace OpenWeatherAPP.ViewModels
         [ObservableProperty]
         private float _temperatura;
 
+        [ObservableProperty]
+        private float _temperaturaMinima;
+
+        [ObservableProperty]
+        private float _temperaturaMaxima;
+
+        [ObservableProperty]
+        private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
+
         [RelayCommand]
         private async Task GetWeatherAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Cidade))
+            if (!string.IsNullOrWhiteSpace(EntryCidade))
             {
-                var weatherData = await _service.GetWeather(Cidade);
+                var weatherData = await _service.GetWeather(EntryCidade);
 
                 //Debug.WriteLine($"Weather: {weatherData.weather}");
                 //Debug.WriteLine($"Description: {weatherData.weather?[0]?.description}");
@@ -43,13 +55,27 @@ namespace OpenWeatherAPP.ViewModels
 
                 if (weatherData?.weather != null)
                 {
+                    Cidade = weatherData.name;
                     Descricao = weatherData.weather[0].description;
                     Temperatura = weatherData.main.temp;
+                    TemperaturaMinima = weatherData.main.temp_min;
+                    TemperaturaMaxima = weatherData.main.temp_max;
                 }
                 else
                 {
                     Descricao = "Cidade não encontrada";
                     Temperatura = 0;
+                }
+
+                var forecastData = await _service.GetForecast(weatherData.coord.lat, weatherData.coord.lon);
+
+                if (forecastData?.list != null)
+                {
+                    ForecastList.Clear();
+                    foreach (var forecast in forecastData.list)
+                    {
+                        ForecastList.Add(forecast);
+                    }
                 }
             }
         }

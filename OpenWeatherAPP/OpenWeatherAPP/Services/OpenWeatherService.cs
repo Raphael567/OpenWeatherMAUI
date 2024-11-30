@@ -13,6 +13,7 @@ namespace OpenWeatherAPP.Services
     public class OpenWeatherService
     {
         private const string BaseUrl = "https://api.openweathermap.org/data/2.5/weather";
+        private const string WeatherForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&appid={2}&units=metric&lang=pt";
         private const string ApiKey = "01badcc1fa8fb95a73f8eece4a40c8de";
 
         private readonly HttpClient _httpClient;
@@ -20,6 +21,37 @@ namespace OpenWeatherAPP.Services
         public OpenWeatherService()
         {
             _httpClient = new HttpClient();
+        }
+
+        public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)
+        {
+            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Resposta da API: {json}");
+
+                    var weatherForecastResponse = JsonSerializer.Deserialize<WeatherForecastResponse>(json);
+
+                    return weatherForecastResponse;
+                }
+
+                Debug.WriteLine($"Erro na API. Status Code: {response.StatusCode}");
+                return null;
+            }
+            catch (SystemException ex)
+            {
+                throw new Exception($"Erro na requisição dos dados: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao obter previsão do tempo: {ex.Message}");
+            }
         }
 
         public async Task<WeatherResponse> GetWeather(string cidade)
