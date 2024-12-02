@@ -21,6 +21,10 @@ namespace OpenWeatherAPP.Models
         public MainData main { get; set; }
         public List<Weather> weather { get; set; }
         public string dt_txt { get; set; }
+
+        public string GetTime => DateTime.Parse(dt_txt).ToString("HH:mm");
+        public string FormattedTemp => $"{main.temp}°C";
+        public string WeatherIcon => $"https://openweathermap.org/img/wn/{weather[0].icon}@2x.png";
     }
 
     public class City

@@ -19,10 +19,12 @@ namespace OpenWeatherAPP.ViewModels
         public OpenWeatherViewModel()
         {
             _service = new OpenWeatherService();
+            GetWeatherAsync();
+            //OnLoadImageCommand = new RelayCommand(OnLoadImageAsync);
         }
 
         [ObservableProperty]
-        private string _entryCidade;
+        private string _entryCidade = "São Paulo";
 
         [ObservableProperty]
         private string _cidade;
@@ -41,6 +43,11 @@ namespace OpenWeatherAPP.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
+
+        [ObservableProperty]
+        private Image myImage;
+
+        //public IRelayCommand OnLoadImageCommand { get; }
 
         [RelayCommand]
         private async Task GetWeatherAsync()
@@ -79,5 +86,40 @@ namespace OpenWeatherAPP.ViewModels
                 }
             }
         }
+
+        //private async void OnLoadImageAsync()
+        //{
+        //    await LoadImageManually();
+        //}
+
+        //async Task LoadImageManually()
+        //{
+        //    try
+        //    {
+        //        var handler = new HttpClientHandler()
+        //        {
+        //            SslProtocols = System.Security.Authentication.SslProtocols.Tls12 |
+        //                           System.Security.Authentication.SslProtocols.Tls13
+        //        };
+
+        //        using var client = new HttpClient(handler);
+        //        var response = await client.GetAsync("https://openweathermap.org/img/wn/10d@2x.png");
+
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            var stream = await response.Content.ReadAsStreamAsync();
+        //            var imageSource = ImageSource.FromStream(() => stream);
+        //            MyImage.Source = ImageSource.FromStream(() => stream);
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"Erro ao carregar imagem: {response.StatusCode}");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Erro: {ex.Message}");
+        //    }
+        //}
     }
 }

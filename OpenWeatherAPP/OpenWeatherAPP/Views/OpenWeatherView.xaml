@@ -5,6 +5,14 @@
              Title="OpenWeatherView">
     <VerticalStackLayout Padding="20" Spacing="10">
 
+        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" />
+        <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
+
+        <Image Source="{Binding MyImage}"/>
+
+        <Button Text="Carregar Imagem"
+                Command="{Binding OnLoadImageCommand}" />
+
         <StackLayout HorizontalOptions="Center">
             <Label Text="{Binding Cidade}" FontSize="28" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
             <HorizontalStackLayout HorizontalOptions="Center">
@@ -35,22 +43,36 @@
                        TextColor="Gray"/>
             </VerticalStackLayout>
         </Frame>
-        
-        <CollectionView ItemsSource="{Binding ForecastList}">
+
+        <CollectionView ItemsSource="{Binding ForecastList}" 
+                HeightRequest="150" 
+                Margin="0,10"
+                HorizontalOptions="FillAndExpand">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10">
-                        <Label Text="{Binding GetDateTime, StringFormat='{0:dddd, MMMM dd, yyyy - HH:mm}'}" />
-                        <Label Text="{Binding Weather[0].Description}" />
-                        <Label Text="{Binding Main.TempMin}" />
-                        <Label Text="{Binding Main.TempMax}" />
+                    <StackLayout Padding="5" WidthRequest="80" VerticalOptions="Center" HorizontalOptions="Center">
+
+                        <!-- Hora -->
+                        <Label Text="{Binding GetTime, StringFormat='{0:HH:mm}'}" 
+                               FontSize="12" 
+                               HorizontalTextAlignment="Center" />
+                        <!-- Ícone do clima -->
+                        <Image Source="{Binding WeatherIcon}" 
+                               WidthRequest="40" 
+                               HeightRequest="40" 
+                               HorizontalOptions="Center" />
+                        <!-- Temperatura -->
+                        <Label Text="{Binding main.temp}" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               HorizontalTextAlignment="Center" />
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
-        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" />
-        <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" />
-        
+
     </VerticalStackLayout>
 </ContentPage>

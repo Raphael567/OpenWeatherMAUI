@@ -21,6 +21,8 @@ namespace OpenWeatherAPP.Models
         public float feels_Like { get; set; }
         public float temp_min { get; set; }
         public float temp_max { get; set; }
+        public float pressure { get; set; }
+        public float humidity { get; set; }
     }
 
     public class Coord
@@ -29,7 +31,7 @@ namespace OpenWeatherAPP.Models
         public double lat { get; set; }
     }
 
-    public class Weather 
+    public class Weather
     {
         public string description { get; set; }
         public string icon { get; set; }
