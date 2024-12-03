@@ -88,54 +88,52 @@ namespace OpenWeatherAPP.ViewModels
                     }
                 }
 
-                var dailyForecastData = await _service.GetDailyForecast(weatherData.coord.lat, weatherData.coord.lon);
+                var dailyForecastData = await _service.Get5DayForecast(weatherData.coord.lat, weatherData.coord.lon);
 
-                _dailyForecastList = new ObservableCollection<DailyForecast>(dailyForecastData);
-
-                //if (dailyForecastData?.list != null)
-                //{
-                //    _dailyForecastList.Clear();
-                //    foreach (var dailyForecast in dailyForecastData.list)
-                //    {
-                //        _dailyForecastList.Add(dailyForecast);
-                //    }
-                //}
+                if (dailyForecastData != null)
+                {
+                    DailyForecastList.Clear();
+                    foreach (var forecast in dailyForecastData)
+                    {
+                        DailyForecastList.Add(forecast);
+                    }
+                }
             }
+
+            //private async void OnLoadImageAsync()
+            //{
+            //    await LoadImageManually();
+            //}
+
+            //async Task LoadImageManually()
+            //{
+            //    try
+            //    {
+            //        var handler = new HttpClientHandler()
+            //        {
+            //            SslProtocols = System.Security.Authentication.SslProtocols.Tls12 |
+            //                           System.Security.Authentication.SslProtocols.Tls13
+            //        };
+
+            //        using var client = new HttpClient(handler);
+            //        var response = await client.GetAsync("https://openweathermap.org/img/wn/10d@2x.png");
+
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            var stream = await response.Content.ReadAsStreamAsync();
+            //            var imageSource = ImageSource.FromStream(() => stream);
+            //            MyImage.Source = ImageSource.FromStream(() => stream);
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine($"Erro ao carregar imagem: {response.StatusCode}");
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Erro: {ex.Message}");
+            //    }
+            //}
         }
-
-        //private async void OnLoadImageAsync()
-        //{
-        //    await LoadImageManually();
-        //}
-
-        //async Task LoadImageManually()
-        //{
-        //    try
-        //    {
-        //        var handler = new HttpClientHandler()
-        //        {
-        //            SslProtocols = System.Security.Authentication.SslProtocols.Tls12 |
-        //                           System.Security.Authentication.SslProtocols.Tls13
-        //        };
-
-        //        using var client = new HttpClient(handler);
-        //        var response = await client.GetAsync("https://openweathermap.org/img/wn/10d@2x.png");
-
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            var stream = await response.Content.ReadAsStreamAsync();
-        //            var imageSource = ImageSource.FromStream(() => stream);
-        //            MyImage.Source = ImageSource.FromStream(() => stream);
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Erro ao carregar imagem: {response.StatusCode}");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro: {ex.Message}");
-        //    }
-        //}
     }
 }

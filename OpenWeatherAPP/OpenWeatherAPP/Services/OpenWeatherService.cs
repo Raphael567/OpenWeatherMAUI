@@ -87,37 +87,37 @@ namespace OpenWeatherAPP.Services
             }
         }
 
-        public async Task<List<DailyForecast>> GetDailyForecast(double latitude, double longitude)
+        public async Task<List<DailyForecast>> Get5DayForecast(double latitude, double longitude)
         {
-            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+            var detailedForecast = await GetForecast(latitude, longitude);
 
-            try
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var forecastResponse = JsonSerializer.Deserialize<WeatherForecastResponse>(json);
-
-                    // Processando a previsão para retornar 10 dias
-                    var dailyForecasts = forecastResponse.list.Take(10).Select(f => new DailyForecast
-                    {
-                        Date = f.dt_txt,
-                        Temperature = f.main.temp,
-                        Description = f.weather[0].description,
-                        IconUrl = $"https://openweathermap.org/img/wn/{f.weather[0].icon}.png"
-                    }).ToList();
-
-                    return dailyForecasts;
-                }
-
+            if (detailedForecast == null || detailedForecast.list == null)
                 return null;
-            }
-            catch (Exception ex)
+
+            var groupedByDay = detailedForecast.list
+                .GroupBy(item => DateTime.Parse(item.dt_txt).Date)
+                .Take(5);
+
+            var dailyForecasts = groupedByDay.Select(dayGroup =>
             {
-                throw new Exception($"Erro ao obter previsão do tempo: {ex.Message}");
-            }
+                var minTemp = dayGroup.Min(item => item.main.temp_min);
+                var maxTemp = dayGroup.Max(item => item.main.temp_max);
+
+                var weather = dayGroup.First().weather;
+
+                return new DailyForecast
+                {
+                    dt = new DateTimeOffset(dayGroup.Key).ToUnixTimeSeconds(),
+                    temp = new Temp
+                    {
+                        min = minTemp,
+                        max = maxTemp
+                    },
+                    weather = weather
+                };
+            }).ToList();
+
+            return dailyForecasts;
         }
     }
 }
