@@ -20,7 +20,12 @@ namespace OpenWeatherAPP.Services
 
         public OpenWeatherService()
         {
-            _httpClient = new HttpClient();
+            HttpClientHandler handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true
+            };
+
+            _httpClient = new HttpClient(handler);
         }
 
         public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)

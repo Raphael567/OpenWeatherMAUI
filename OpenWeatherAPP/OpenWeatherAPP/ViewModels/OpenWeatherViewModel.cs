@@ -20,11 +20,10 @@ namespace OpenWeatherAPP.ViewModels
         {
             _service = new OpenWeatherService();
             GetWeatherAsync();
-            //OnLoadImageCommand = new RelayCommand(OnLoadImageAsync);
         }
 
         [ObservableProperty]
-        private string _entryCidade = "São Paulo";
+        private string _entryCidade;
 
         [ObservableProperty]
         private string _cidade;
@@ -33,13 +32,13 @@ namespace OpenWeatherAPP.ViewModels
         private string _descricao;
 
         [ObservableProperty]
-        private float _temperatura;
+        private double _temperatura;
 
         [ObservableProperty]
-        private float _temperaturaMinima;
+        private double _temperaturaMinima;
 
         [ObservableProperty]
-        private float _temperaturaMaxima;
+        private double _temperaturaMaxima;
 
         [ObservableProperty]
         private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
@@ -47,21 +46,12 @@ namespace OpenWeatherAPP.ViewModels
         [ObservableProperty]
         private ObservableCollection<DailyForecast> _dailyForecastList = new ObservableCollection<DailyForecast>();
 
-        [ObservableProperty]
-        private Image myImage;
-
-        //public IRelayCommand OnLoadImageCommand { get; }
-
         [RelayCommand]
         private async Task GetWeatherAsync()
         {
             if (!string.IsNullOrWhiteSpace(EntryCidade))
             {
                 var weatherData = await _service.GetWeather(EntryCidade);
-
-                //Debug.WriteLine($"Weather: {weatherData.weather}");
-                //Debug.WriteLine($"Description: {weatherData.weather?[0]?.description}");
-                //Debug.WriteLine($"Temperature: {weatherData.main?.temp}");
 
                 if (weatherData?.weather != null)
                 {
@@ -99,41 +89,6 @@ namespace OpenWeatherAPP.ViewModels
                     }
                 }
             }
-
-            //private async void OnLoadImageAsync()
-            //{
-            //    await LoadImageManually();
-            //}
-
-            //async Task LoadImageManually()
-            //{
-            //    try
-            //    {
-            //        var handler = new HttpClientHandler()
-            //        {
-            //            SslProtocols = System.Security.Authentication.SslProtocols.Tls12 |
-            //                           System.Security.Authentication.SslProtocols.Tls13
-            //        };
-
-            //        using var client = new HttpClient(handler);
-            //        var response = await client.GetAsync("https://openweathermap.org/img/wn/10d@2x.png");
-
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            var stream = await response.Content.ReadAsStreamAsync();
-            //            var imageSource = ImageSource.FromStream(() => stream);
-            //            MyImage.Source = ImageSource.FromStream(() => stream);
-            //        }
-            //        else
-            //        {
-            //            Console.WriteLine($"Erro ao carregar imagem: {response.StatusCode}");
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Erro: {ex.Message}");
-            //    }
-            //}
         }
     }
 }
