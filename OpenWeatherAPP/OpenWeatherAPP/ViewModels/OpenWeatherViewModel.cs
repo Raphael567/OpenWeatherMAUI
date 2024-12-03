@@ -45,6 +45,9 @@ namespace OpenWeatherAPP.ViewModels
         private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
 
         [ObservableProperty]
+        private ObservableCollection<DailyForecast> _dailyForecastList = new ObservableCollection<DailyForecast>();
+
+        [ObservableProperty]
         private Image myImage;
 
         //public IRelayCommand OnLoadImageCommand { get; }
@@ -84,6 +87,19 @@ namespace OpenWeatherAPP.ViewModels
                         ForecastList.Add(forecast);
                     }
                 }
+
+                var dailyForecastData = await _service.GetDailyForecast(weatherData.coord.lat, weatherData.coord.lon);
+
+                _dailyForecastList = new ObservableCollection<DailyForecast>(dailyForecastData);
+
+                //if (dailyForecastData?.list != null)
+                //{
+                //    _dailyForecastList.Clear();
+                //    foreach (var dailyForecast in dailyForecastData.list)
+                //    {
+                //        _dailyForecastList.Add(dailyForecast);
+                //    }
+                //}
             }
         }
 

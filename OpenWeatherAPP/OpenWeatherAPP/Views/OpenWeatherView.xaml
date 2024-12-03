@@ -74,5 +74,19 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <!-- Exibindo previsão de 10 dias -->
+        <CollectionView ItemsSource="{Binding DailyForecastList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10">
+                        <Label Text="{Binding Date}" FontSize="Medium"/>
+                        <Label Text="{Binding Temperature}" FontSize="Large"/>
+                        <Label Text="{Binding Description}" FontSize="Small"/>
+                        <Image Source="{Binding IconUrl}" WidthRequest="40" HeightRequest="40"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

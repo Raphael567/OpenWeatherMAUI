@@ -86,5 +86,38 @@ namespace OpenWeatherAPP.Services
                 throw new Exception($"Erro ao obter clima: {ex.Message}");
             }
         }
+
+        public async Task<List<DailyForecast>> GetDailyForecast(double latitude, double longitude)
+        {
+            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var forecastResponse = JsonSerializer.Deserialize<WeatherForecastResponse>(json);
+
+                    // Processando a previsão para retornar 10 dias
+                    var dailyForecasts = forecastResponse.list.Take(10).Select(f => new DailyForecast
+                    {
+                        Date = f.dt_txt,
+                        Temperature = f.main.temp,
+                        Description = f.weather[0].description,
+                        IconUrl = $"https://openweathermap.org/img/wn/{f.weather[0].icon}.png"
+                    }).ToList();
+
+                    return dailyForecasts;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao obter previsão do tempo: {ex.Message}");
+            }
+        }
     }
 }
