@@ -3,97 +3,113 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OpenWeatherAPP.Views.OpenWeatherView">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15" BackgroundColor="#f7f9fc">
+    <AbsoluteLayout>
+        <ScrollView AbsoluteLayout.LayoutFlags="All"
+                    AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <VerticalStackLayout Padding="20" Spacing="15" BackgroundColor="#f7f9fc">
+                <!-- Campo de busca -->
+                <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
+                    <VerticalStackLayout Spacing="10">
+                        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" 
+                               BackgroundColor="Transparent"
+                               TextColor="Black"
+                               FontSize="18" />
 
-            <!-- Campo de busca -->
-            <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
-                <VerticalStackLayout Spacing="10">
-                    <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" 
-                           BackgroundColor="Transparent"
-                           TextColor="Black"
-                           FontSize="18" />
-                    
-                    <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" 
-                            BackgroundColor="#0078D4" TextColor="White" CornerRadius="10" />
-                </VerticalStackLayout>
-            </Frame>
+                        <Button Text="Buscar Clima" Command="{Binding GetWeatherCommand}" 
+                                BackgroundColor="#0078D4" TextColor="White" CornerRadius="10" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Clima atual -->
-            <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="20" BorderColor="#d3d3d3">
-                <StackLayout HorizontalOptions="Center" Spacing="10">
-                    <Label Text="{Binding Cidade}" FontSize="28" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Center" />
-                    <Label Text="{Binding Temperatura, StringFormat='{}{0:F0}°C'}" FontSize="45" FontAttributes="Bold" TextColor="#0078D4"  HorizontalOptions="Center"/>
-                    <Label Text="{Binding Descricao}" FontSize="20" TextColor="#555" />
+                <!-- Clima atual -->
+                <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="20" BorderColor="#d3d3d3">
+                    <StackLayout HorizontalOptions="Center" Spacing="10">
+                        <Label Text="{Binding Cidade}" FontSize="28" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Center" />
+                        <Label Text="{Binding Temperatura, StringFormat='{}{0:F0}°C'}" FontSize="45" FontAttributes="Bold" TextColor="#0078D4"  HorizontalOptions="Center"/>
+                        <Label Text="{Binding Descricao}" FontSize="20" TextColor="#555" />
 
-                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-                        <Label Text="{Binding TemperaturaMaxima, StringFormat='{}H:{0:F0}°'}" FontSize="16" TextColor="#333" />
-                        <Label Text="{Binding TemperaturaMinima, StringFormat='{}L:{0:F0}°'}" FontSize="16" TextColor="#555" />
-                    </HorizontalStackLayout>
-                </StackLayout>
-            </Frame>
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Label Text="{Binding TemperaturaMaxima, StringFormat='{}H:{0:F0}°'}" FontSize="16" TextColor="#333" />
+                            <Label Text="{Binding TemperaturaMinima, StringFormat='{}L:{0:F0}°'}" FontSize="16" TextColor="#555" />
+                        </HorizontalStackLayout>
+                    </StackLayout>
+                </Frame>
 
-            <!-- Previsão por hora -->
-            <Label Text="Hourly Forecast" FontSize="24" FontAttributes="Bold" TextColor="#333" Margin="0,10,0,0" />
+                <!-- Previsão por hora -->
+                <Label Text="Hourly Forecast" FontSize="24" FontAttributes="Bold" TextColor="#333" Margin="0,10,0,0" />
 
-            <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
-                <CollectionView ItemsSource="{Binding ForecastList}" HeightRequest="150" HorizontalOptions="FillAndExpand">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <VerticalStackLayout Padding="5" WidthRequest="80" HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
-                                <Label Text="{Binding GetTime, StringFormat='{0:HH:mm}'}" 
-                                       FontSize="14" TextColor="#333" HorizontalTextAlignment="Center" />
-                                
-                                <Image Source="{Binding WeatherIcon}" WidthRequest="40" HeightRequest="40" />
-                                
-                                <Label Text="{Binding main.temp, StringFormat='{}{0:F0}°'}" 
-                                       FontSize="16" FontAttributes="Bold" TextColor="#0078D4" HorizontalTextAlignment="Center" />
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Frame>
+                <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
+                    <CollectionView ItemsSource="{Binding ForecastList}" HeightRequest="150" HorizontalOptions="FillAndExpand">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout Padding="5" WidthRequest="80" HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
+                                    <Label Text="{Binding GetTime, StringFormat='{0:HH:mm}'}" 
+                                           FontSize="14" TextColor="#333" HorizontalTextAlignment="Center" />
 
-            <!-- Previsão de 5 dias -->
-            <Label Text="5-Days Forecast" FontSize="24" FontAttributes="Bold" TextColor="#333" Margin="0,10,0,0" />
+                                    <Image Source="{Binding WeatherIcon}" WidthRequest="40" HeightRequest="40" />
 
-            <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
-                <CollectionView ItemsSource="{Binding DailyForecastList}" Margin="0,10,0,0">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <HorizontalStackLayout Spacing="20" Padding="10">
-                                
-                                <Label Text="{Binding DayOfWeek}" FontSize="18" TextColor="#333"  HorizontalOptions="Center" FontAttributes="Bold"/>
-                                <Image Source="{Binding IconUrl}" WidthRequest="40" HeightRequest="40" />
-                                
-                                <Label FontSize="16">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="Max: " TextColor="#333"/>
-                                            <Span Text="{Binding temp.max, StringFormat='{}{0:F0}°'}" FontAttributes="Bold" TextColor="#0078D4" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                
-                                <Label FontSize="16">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="Min: " TextColor="#555"/>
-                                            <Span Text="{Binding temp.min, StringFormat='{}{0:F0}°'}" FontAttributes="Bold" TextColor="#0078D4" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                
-                                <Label Text="{Binding weather[0].description}" FontSize="14" TextColor="#555"/>
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Frame>
+                                    <Label Text="{Binding main.temp, StringFormat='{}{0:F0}°'}" 
+                                           FontSize="16" FontAttributes="Bold" TextColor="#0078D4" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Frame>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- Previsão de 5 dias -->
+                <Label Text="5-Days Forecast" FontSize="24" FontAttributes="Bold" TextColor="#333" Margin="0,10,0,0" />
+
+                <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
+                    <CollectionView ItemsSource="{Binding DailyForecastList}" Margin="0,10,0,0">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="20" Padding="10">
+
+                                    <Label Text="{Binding DayOfWeek}" FontSize="18" TextColor="#333"  HorizontalOptions="Center" FontAttributes="Bold"/>
+                                    <Image Source="{Binding IconUrl}" WidthRequest="40" HeightRequest="40" />
+
+                                    <Label FontSize="16">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Max: " TextColor="#333"/>
+                                                <Span Text="{Binding temp.max, StringFormat='{}{0:F0}°'}" FontAttributes="Bold" TextColor="#0078D4" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label FontSize="16">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Min: " TextColor="#555"/>
+                                                <Span Text="{Binding temp.min, StringFormat='{}{0:F0}°'}" FontAttributes="Bold" TextColor="#0078D4" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Text="{Binding weather[0].description}" FontSize="14" TextColor="#555"/>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Overlay de carregamento -->
+        <Grid AbsoluteLayout.LayoutFlags="All"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              BackgroundColor="Black"
+              Opacity="0.5"
+              IsVisible="{Binding IsLoading}">
+        </Grid>
+
+        <!-- Indicador de carregamento -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="White"
+                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                           AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1" />
+    </AbsoluteLayout>
 </ContentPage>

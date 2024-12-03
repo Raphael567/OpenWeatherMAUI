@@ -19,7 +19,6 @@ namespace OpenWeatherAPP.ViewModels
         public OpenWeatherViewModel()
         {
             _service = new OpenWeatherService();
-            GetWeatherAsync();
         }
 
         [ObservableProperty]
@@ -41,6 +40,9 @@ namespace OpenWeatherAPP.ViewModels
         private double _temperaturaMaxima;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
 
         [ObservableProperty]
@@ -49,44 +51,79 @@ namespace OpenWeatherAPP.ViewModels
         [RelayCommand]
         private async Task GetWeatherAsync()
         {
-            if (!string.IsNullOrWhiteSpace(EntryCidade))
+            try
             {
-                var weatherData = await _service.GetWeather(EntryCidade);
+                IsLoading = true;
 
-                if (weatherData?.weather != null)
+                if (!string.IsNullOrWhiteSpace(EntryCidade))
                 {
-                    Cidade = weatherData.name;
-                    Descricao = weatherData.weather[0].description;
-                    Temperatura = weatherData.main.temp;
-                    TemperaturaMinima = weatherData.main.temp_min;
-                    TemperaturaMaxima = weatherData.main.temp_max;
+                    var weatherData = await _service.GetWeather(EntryCidade);
+
+                    if (weatherData?.weather != null)
+                    {
+                        await LoadWeatherData(EntryCidade);
+                        await LoadForecastData(weatherData.coord.lat, weatherData.coord.lon);
+                        await LoadDailyForecastData(weatherData.coord.lat, weatherData.coord.lon);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Erro", "Local não encontrado", "OK");
+                    }
                 }
                 else
                 {
-                    Descricao = "Cidade não encontrada";
-                    Temperatura = 0;
+                    await Application.Current.MainPage.DisplayAlert("Erro", "Digite o nome do local", "OK");
                 }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                await Application.Current.MainPage.DisplayAlert("Erro", "Erro ao buscar dados", "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
 
-                var forecastData = await _service.GetForecast(weatherData.coord.lat, weatherData.coord.lon);
+        private async Task LoadWeatherData(string cidade)
+        {
+            var weatherData = await _service.GetWeather(cidade);
 
-                if (forecastData?.list != null)
+            if (weatherData != null)
+            {
+                Cidade = weatherData.name;
+                Descricao = weatherData.weather[0].description;
+                Temperatura = weatherData.main.temp;
+                TemperaturaMinima = weatherData.main.temp_min;
+                TemperaturaMaxima = weatherData.main.temp_max;
+            }
+        }
+
+        private async Task LoadForecastData(double latitude, double longitude)
+        {
+            var forecastData = await _service.GetForecast(latitude, longitude);
+
+            if (forecastData != null)
+            {
+                ForecastList.Clear();
+                foreach (var forecast in forecastData.list)
                 {
-                    ForecastList.Clear();
-                    foreach (var forecast in forecastData.list)
-                    {
-                        ForecastList.Add(forecast);
-                    }
+                    ForecastList.Add(forecast);
                 }
+            }
+        }
 
-                var dailyForecastData = await _service.Get5DayForecast(weatherData.coord.lat, weatherData.coord.lon);
+        private async Task LoadDailyForecastData(double latitude, double longitude)
+        {
+            var dailyForecastData = await _service.Get5DayForecast(latitude, longitude);
 
-                if (dailyForecastData != null)
+            if (dailyForecastData != null)
+            {
+                DailyForecastList.Clear();
+                foreach (var forecast in dailyForecastData)
                 {
-                    DailyForecastList.Clear();
-                    foreach (var forecast in dailyForecastData)
-                    {
-                        DailyForecastList.Add(forecast);
-                    }
+                    DailyForecastList.Add(forecast);
                 }
             }
         }
