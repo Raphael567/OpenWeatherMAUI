@@ -44,7 +44,6 @@ namespace OpenWeatherAPP.Models
                 if (string.IsNullOrWhiteSpace(description))
                     return string.Empty;
 
-                // Converte para Title Case
                 TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
                 return textInfo.ToTitleCase(description);
             }
