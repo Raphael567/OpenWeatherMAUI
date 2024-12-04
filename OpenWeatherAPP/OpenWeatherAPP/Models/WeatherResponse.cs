@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -35,5 +36,18 @@ namespace OpenWeatherAPP.Models
     {
         public string description { get; set; }
         public string icon { get; set; }
+
+        public string FormattedDescription
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(description))
+                    return string.Empty;
+
+                // Converte para Title Case
+                TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+                return textInfo.ToTitleCase(description);
+            }
+        }
     }
 }

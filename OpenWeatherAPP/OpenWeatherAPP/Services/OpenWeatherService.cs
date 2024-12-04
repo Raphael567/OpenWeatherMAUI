@@ -56,21 +56,40 @@ namespace OpenWeatherAPP.Services
             }
         }
 
-        public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)
-        {
-            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
-            return await GetApiResponseAsync<WeatherForecastResponse>(url);
-        }
-
         public async Task<WeatherResponse> GetWeather(string cidade)
         {
             var url = string.Format(BaseUrl, cidade, ApiKey);
             return await GetApiResponseAsync<WeatherResponse>(url);
         }
 
+        public async Task<WeatherForecastResponse> GetHourlyForecast(double latitude, double longitude)
+        {
+            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+            return await GetApiResponseAsync<WeatherForecastResponse>(url);
+        }
+
+        public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)
+        {
+            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+            var forecastResponse = await GetApiResponseAsync<WeatherForecastResponse>(url);
+
+            if (forecastResponse?.list != null)
+            {
+                var currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+                forecastResponse.list = forecastResponse.list
+                    .Where(forecast =>
+                        forecast.dt >= currentTimestamp &&
+                        forecast.dt <= currentTimestamp + (24 * 60 * 60))
+                    .ToList();
+            }
+
+            return forecastResponse;
+        }
+
         public async Task<List<DailyForecast>> Get5DayForecast(double latitude, double longitude)
         {
-            var detailedForecast = await GetForecast(latitude, longitude);
+            var detailedForecast = await GetApiResponseAsync<WeatherForecastResponse>(string.Format(WeatherForecastUrl, latitude, longitude, ApiKey));
 
             if (detailedForecast == null || detailedForecast.list == null)
                 return null;

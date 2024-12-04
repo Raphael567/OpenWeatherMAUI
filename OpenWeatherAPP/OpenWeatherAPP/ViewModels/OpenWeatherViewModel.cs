@@ -43,6 +43,9 @@ namespace OpenWeatherAPP.ViewModels
         private bool _isLoading;
 
         [ObservableProperty]
+        private ObservableCollection<ForecastItem> _hourlyForecastList = new ObservableCollection<ForecastItem>();
+
+        [ObservableProperty]
         private ObservableCollection<ForecastItem> _forecastList = new ObservableCollection<ForecastItem>();
 
         [ObservableProperty]
@@ -62,6 +65,7 @@ namespace OpenWeatherAPP.ViewModels
                     if (weatherData?.weather != null)
                     {
                         await LoadWeatherData(EntryCidade);
+                        LoadHourlyForecastData(weatherData.coord.lat, weatherData.coord.lon);
                         await LoadForecastData(weatherData.coord.lat, weatherData.coord.lon);
                         await LoadDailyForecastData(weatherData.coord.lat, weatherData.coord.lon);
                     }
@@ -93,10 +97,24 @@ namespace OpenWeatherAPP.ViewModels
             if (weatherData != null)
             {
                 Cidade = weatherData.name;
-                Descricao = weatherData.weather[0].description;
+                Descricao = weatherData.weather[0].FormattedDescription;
                 Temperatura = weatherData.main.temp;
                 TemperaturaMinima = weatherData.main.temp_min;
                 TemperaturaMaxima = weatherData.main.temp_max;
+            }
+        }
+
+        private async Task LoadHourlyForecastData(double latitude, double longitude)
+        {
+            var hourlyForecastData = await _service.GetHourlyForecast(latitude, longitude);
+
+            if (hourlyForecastData != null)
+            {
+                HourlyForecastList.Clear();
+                foreach (var hourlyForecast in hourlyForecastData.list)
+                {
+                    HourlyForecastList.Add(hourlyForecast);
+                }
             }
         }
 
