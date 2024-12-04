@@ -12,8 +12,9 @@ namespace OpenWeatherAPP.Services
 {
     public class OpenWeatherService
     {
-        private const string BaseUrl = "https://api.openweathermap.org/data/2.5/weather";
+        private const string BaseUrl = "https://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units=metric&lang=en";
         private const string WeatherForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&appid={2}&units=metric&lang=en";
+
         private const string ApiKey = "01badcc1fa8fb95a73f8eece4a40c8de";
 
         private readonly HttpClient _httpClient;
@@ -28,10 +29,8 @@ namespace OpenWeatherAPP.Services
             _httpClient = new HttpClient(handler);
         }
 
-        public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)
+        public async Task<T> GetApiResponseAsync<T>(string url)
         {
-            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
-
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
@@ -41,13 +40,11 @@ namespace OpenWeatherAPP.Services
                     var json = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine($"Resposta da API: {json}");
 
-                    var weatherForecastResponse = JsonSerializer.Deserialize<WeatherForecastResponse>(json);
-
-                    return weatherForecastResponse;
+                    return JsonSerializer.Deserialize<T>(json);
                 }
 
                 Debug.WriteLine($"Erro na API. Status Code: {response.StatusCode}");
-                return null;
+                return default;
             }
             catch (SystemException ex)
             {
@@ -55,41 +52,20 @@ namespace OpenWeatherAPP.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Erro ao obter previsão do tempo: {ex.Message}");
+                throw new Exception($"Erro ao obter dados: {ex.Message}");
             }
+        }
+
+        public async Task<WeatherForecastResponse> GetForecast(double latitude, double longitude)
+        {
+            var url = string.Format(WeatherForecastUrl, latitude, longitude, ApiKey);
+            return await GetApiResponseAsync<WeatherForecastResponse>(url);
         }
 
         public async Task<WeatherResponse> GetWeather(string cidade)
         {
-            var url = $"{BaseUrl}?q={cidade}&appid={ApiKey}&units=metric&lang=en";
-
-            try
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Resposta da API: {json}");
-
-                    var weatherResponse = JsonSerializer.Deserialize<WeatherResponse>(json);
-                    Debug.WriteLine($"Description: {weatherResponse?.weather?[0]?.description}");
-                    Debug.WriteLine($"Temperature: {weatherResponse?.main?.temp}");
-
-                    return weatherResponse;
-                }
-                
-                Debug.WriteLine($"Erro na API. Status Code: {response.StatusCode}");
-                return null;
-            }
-            catch(SystemException ex)
-            {
-                throw new Exception($"Erro na requisição dos dados: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Erro ao obter clima: {ex.Message}");
-            }
+            var url = string.Format(BaseUrl, cidade, ApiKey);
+            return await GetApiResponseAsync<WeatherResponse>(url);
         }
 
         public async Task<List<DailyForecast>> Get5DayForecast(double latitude, double longitude)
