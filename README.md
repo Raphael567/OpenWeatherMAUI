@@ -33,12 +33,12 @@ Atividade avaliativa referente a disciplina de PAM (Programação Mobile)
 2. Abra o projeto no Visual Studio 2022 (com suporte ao .NET MAUI configurado).
 
 3. Configure sua chave da API OpenWeather:
-  - Obtenha uma chave de API gratuita em OpenWeather.
-  - Substitua <sua-chave-api> no código responsável pelas requisições à API (Services/OpenWeatherService.cs).
+   - Obtenha uma chave de API gratuita em OpenWeather.
+   - Substitua <sua-chave-api> no código responsável pelas requisições à API (Services/OpenWeatherService.cs).
 
 4. Conecte um dispositivo ou emulador e execute o aplicativo.
 
 ## Requisitos
- - .NET 7.0 ou superior
- - Visual Studio 2022 com o workload .NET MAUI
- - Conta na OpenWeather API para gerar uma chave de API gratuita
+  - .NET 7.0 ou superior
+  - Visual Studio 2022 com o workload .NET MAUI
+  - Conta na OpenWeather API para gerar uma chave de API gratuita
