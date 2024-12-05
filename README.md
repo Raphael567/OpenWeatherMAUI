@@ -1,7 +1,7 @@
 # OpenWeatherMAUI
 Atividade avaliativa referente a disciplina de PAM (Programação Mobile)
 
-**OpenWeatherMAUI** é um aplicativo multiplataforma desenvolvido em .NET MAUI que fornece informações detalhadas sobre o clima, utilizando a API do OpenWeather. O aplicativo exibe a previsão do clima para os próximos 5 dias, com detalhes a cada 3 horas, além das condições climáticas atuais. No dispositivo móvel, o aplicativo utiliza a localização via GPS para oferecer previsões baseadas na posição do usuário.
+**OpenWeatherMAUI** é um aplicativo multiplataforma desenvolvido em .NET MAUI que fornece informações detalhadas sobre o clima, utilizando a API do OpenWeather e inspirado no aplicativo climático do IOS (Iphone/Apple). O aplicativo exibe a previsão do clima para os próximos 5 dias, com detalhes a cada 3 horas, além das condições climáticas atuais. No dispositivo móvel, o aplicativo utiliza a localização via GPS para oferecer previsões baseadas na posição do usuário.
 
 ## Funcionalidades
 
