@@ -12,10 +12,10 @@ namespace OpenWeatherAPP.Services
 {
     public class OpenWeatherService
     {
+        private const string ApiKey = "<sua-chave-api>";
+
         private const string BaseUrl = "https://api.openweathermap.org/data/2.5/weather?q={0}&appid={1}&units=metric&lang=en";
         private const string WeatherForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&appid={2}&units=metric&lang=en";
-
-        private const string ApiKey = "<sua-chave-api>";
 
         private readonly HttpClient _httpClient;
 
