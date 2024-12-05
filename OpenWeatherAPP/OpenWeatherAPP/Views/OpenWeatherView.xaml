@@ -92,24 +92,22 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout VerticalOptions="Center">
-                                        <!-- Dia da semana -->
-                                        <Label  Text="{Binding DayOfWeek}" 
-                                                FontSize="18" 
-                                                TextColor="#333" 
-                                                FontAttributes="Bold" />
 
                                         <HorizontalStackLayout Spacing="25" Padding="10">
+                                            <!-- Dia da semana -->
+                                            <Label  Text="{Binding DayOfWeek}" 
+                                                    FontSize="18" 
+                                                    TextColor="#333" 
+                                                    FontAttributes="Bold"
+                                                    WidthRequest="100"/>
+                                            
                                             <!-- Ícone do clima -->
                                             <Image Source="{Binding IconUrl}" 
                                                    WidthRequest="40" 
-                                                   HeightRequest="40" 
-                                                   VerticalOptions="Center" 
-                                                   HorizontalOptions="Center" />
+                                                   HeightRequest="40" />
 
                                             <!-- Temperatura máxima -->
-                                            <Label FontSize="16" 
-                                                   VerticalOptions="Center"
-                                                   HorizontalOptions="Center">
+                                            <Label FontSize="16" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Max: " TextColor="#333"/>
@@ -119,9 +117,7 @@
                                             </Label>
 
                                             <!-- Temperatura mínima -->
-                                            <Label FontSize="16" 
-                                                   VerticalOptions="Center"
-                                                   HorizontalOptions="Center">
+                                            <Label FontSize="16" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Min: " TextColor="#555"/>
@@ -133,9 +129,7 @@
                                             <!-- Descrição do clima -->
                                             <Label Text="{Binding weather[0].FormattedDescription}" 
                                                    FontSize="14" 
-                                                   TextColor="#555" 
-                                                   VerticalOptions="Center" 
-                                                   HorizontalOptions="End" />
+                                                   TextColor="#555" />
                                         </HorizontalStackLayout>
                                     </StackLayout>
                                 </DataTemplate>
