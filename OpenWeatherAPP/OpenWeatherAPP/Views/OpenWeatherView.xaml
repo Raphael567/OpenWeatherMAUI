@@ -10,7 +10,7 @@
                 <!-- Campo de busca -->
                 <Frame BackgroundColor="#ffffff" CornerRadius="10" Padding="10" BorderColor="#d3d3d3">
                     <VerticalStackLayout Spacing="10">
-                        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidade}" 
+                        <Entry Placeholder="Digite uma cidade" Text="{Binding EntryCidadeDisplay}" 
                                BackgroundColor="Transparent"
                                TextColor="Black"
                                FontSize="18" />

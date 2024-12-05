@@ -19,10 +19,13 @@ namespace OpenWeatherAPP.ViewModels
         public OpenWeatherViewModel()
         {
             _service = new OpenWeatherService();
+            LoadLocationDataAsync();
         }
 
+        private string entryCidade;
+
         [ObservableProperty]
-        private string _entryCidade;
+        private string _entryCidadeDisplay;
 
         [ObservableProperty]
         private string _cidade;
@@ -58,31 +61,34 @@ namespace OpenWeatherAPP.ViewModels
             {
                 IsLoading = true;
 
-                if (!string.IsNullOrWhiteSpace(EntryCidade))
+                if (!string.IsNullOrWhiteSpace(EntryCidadeDisplay))
                 {
-                    var weatherData = await _service.GetWeather(EntryCidade);
+                    entryCidade = EntryCidadeDisplay;
+                    EntryCidadeDisplay = string.Empty;
+
+                    var weatherData = await _service.GetWeather(entryCidade);
 
                     if (weatherData?.weather != null)
                     {
-                        await LoadWeatherData(EntryCidade);
-                        LoadHourlyForecastData(weatherData.coord.lat, weatherData.coord.lon);
+                        await LoadWeatherData(entryCidade);
+                        await LoadHourlyForecastData(weatherData.coord.lat, weatherData.coord.lon);
                         await LoadForecastData(weatherData.coord.lat, weatherData.coord.lon);
                         await LoadDailyForecastData(weatherData.coord.lat, weatherData.coord.lon);
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Erro", "Local não encontrado", "OK");
+                        await Application.Current.MainPage.DisplayAlert("Erro⚠", "Local não encontrado", "OK");
                     }
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Erro", "Digite o nome do local", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Erro⚠", "Digite o nome do local", "OK");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                await Application.Current.MainPage.DisplayAlert("Erro", "Erro ao buscar dados", "OK");
+                await Application.Current.MainPage.DisplayAlert("Erro⚠", "Erro ao buscar dados", "OK");
             }
             finally
             {
@@ -143,6 +149,41 @@ namespace OpenWeatherAPP.ViewModels
                 {
                     DailyForecastList.Add(forecast);
                 }
+            }
+        }
+
+        private async Task LoadLocationDataAsync()
+        {
+            try
+            {
+                var location = await Geolocation.GetLastKnownLocationAsync();
+
+                if (location != null)
+                {
+                    IEnumerable<Placemark> placemarks = await Geocoding.GetPlacemarksAsync(location.Latitude, location.Longitude);
+
+                    if (placemarks != null)
+                    {
+                        Placemark placemark = placemarks?.FirstOrDefault();
+                        if (placemark != null)
+                        {
+                            EntryCidadeDisplay = placemark.AdminArea;
+                            await GetWeatherAsync();
+                        }
+                    }
+                }
+                else
+                {
+                    location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                    {
+                        DesiredAccuracy = GeolocationAccuracy.High,
+                        Timeout = TimeSpan.FromSeconds(10)
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
     }
