@@ -34,7 +34,12 @@ Atividade avaliativa referente a disciplina de PAM (Programação Mobile)
 
 3. Configure sua chave da API OpenWeather:
    - Obtenha uma chave de API gratuita em OpenWeather.
-   - Substitua <sua-chave-api> no código responsável pelas requisições à API (Services/OpenWeatherService.cs).
+   - Substitua a ```ApiKey = "<sua-chave-api>"``` no código responsável pelas requisições à API (Services/OpenWeatherService.cs).
+     
+     ```bash
+     public class OpenWeatherService
+     {
+        private const string ApiKey = "<sua-chave-api>";
 
 4. Conecte um dispositivo ou emulador e execute o aplicativo.
 
