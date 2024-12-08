@@ -99,7 +99,7 @@
                                                     FontSize="18" 
                                                     TextColor="#333" 
                                                     FontAttributes="Bold"
-                                                    WidthRequest="100"/>
+                                                    WidthRequest="120"/>
                                             
                                             <!-- Ícone do clima -->
                                             <Image Source="{Binding IconUrl}" 
